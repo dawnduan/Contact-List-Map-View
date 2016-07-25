@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<title> PPL View </title>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.1/angular.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<!--		ng-map setup-->
+	<script src="https://maps.google.com/maps/api/js?libraries=placeses,visualization,drawing,geometry,places"></script>
+	<script src="https://rawgit.com/allenhwkim/angularjs-google-maps/master/build/scripts/ng-map.js"></script>
+	<script src="dist/ng-map.min.js"></script>
+	<script type="text/javascript" src="todo.js"></script>
+</head>
+
+<body ng-controller="mainCtrl">
+	<!--		List view of PPL-->
+	<table class="table table-bordered"> Search:
+		<input type="text" placeholder="Search" ng-model="query">
+		<tr>
+<!--			Sorting Avaiable when clicking 'Name', 'Address'-->
+			<th><a href="" ng-click="sortField = 'name'; reverse = !reverse">Name</a></th>
+			<th><a href="" ng-click="sortField = 'address'; reverse = !reverse">Address</a></th>
+			<th>Avatar</th>
+		</tr>
+		<tr ng-repeat="one in ones | filter:query | orderBy:sortField:reverse">
+			<td>{{ one.name }}</td>
+			<td>{{ one.address }}</td>
+			<td>{{ one.id }}</td>
+		</tr>
+	</table>
+	<caption>Features included: Sorting table columns interactively, Specify Contact using searching engine </caption>
+	
+	<!--		Map View: Info Window Pop up when clicking the marker-->
+	<div>
+		<map zoom="3" center="{{ center }}" default-style="true">
+			<!--			Info Window Pop Up-->
+			<info-window id="detail" max-width="200">
+				<div ng-non-bindable>
+					      Name: {{selectedOne.name}}
+					<br/> Address: {{selectedOne.address}}
+					<br/> </div>
+			</info-window>
+			<!--			Marker Setup-->
+			<marker ng-repeat="one in ones | filter:query" id="{{one.id}" position="{{one.address}}" on-click="showDetail(one)"></marker>
+		</map>
+	</div>
+</body>
+
+</html>
